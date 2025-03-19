@@ -1,2 +1,2 @@
 # popcorn_palace
-A home assignment for AT&amp;T TDP program
+A home assignment for the AT&amp;T TDP program
