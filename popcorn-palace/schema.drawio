@@ -87,7 +87,7 @@
         <mxCell id="1aydxbClM8vl_SHMMEoU-0" value="Make sure that there aren&#39;t 2 shows at the same theatre on the same time -&amp;gt; check when doing show insertion: need to be able to check theatre before (search by theatre)" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="123" y="640" width="582" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="1aydxbClM8vl_SHMMEoU-1" value="Make sure that there is no same seat booked twice at the same show -&amp;gt; can save a binary string at the length of the theatre when initiating the show" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="1aydxbClM8vl_SHMMEoU-1" value="Make sure that there is no same seat booked twice at the same show -&amp;gt; can save a binary string at the length of the theatre when initiating the show. we shall query the by showtimeId together with seatNumber" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="120" y="720" width="582" height="30" as="geometry" />
         </mxCell>
       </root>
