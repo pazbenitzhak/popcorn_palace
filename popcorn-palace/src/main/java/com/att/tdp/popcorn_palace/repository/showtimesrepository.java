@@ -17,5 +17,7 @@ public interface ShowtimeRepository extends JpaRepository<Showtime, Long> {
     "(s.endTime < ?2 AND s.endTime > ?3)")
     List<Showtime> findOverlappingShowtimes(Long theatreId, LocalDateTime addedStartTime, LocalDateTime addedEndTime);
 
-
+    @Query("SELECT s FROM Showtime s WHERE s.movie.id = ?1 " +
+    "AND s.theatre.id = ?2 AND s.startTime = ?3 AND s.endTime = ?4))")
+    Optional<Showtime> findByIdentifiers(Long movieId, Long theatreId, LocalDateTime addedStartTime, LocalDateTime addedEndTime);
 }
