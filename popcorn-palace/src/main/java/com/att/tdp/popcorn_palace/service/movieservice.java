@@ -55,14 +55,14 @@ public class MovieService {
         return this.movieRepository.save(movieObj);
     }
 
-    public void deleteMovie(String title) {
+    public boolean deleteMovie(String title) {
         Optional<Movie> movie = this.movieRepository.findByTitle(title);
         if (!movie.isPresent()) {//movie does not exist already
-            return;
+            return false;
         }// else need to update info
         Movie movieObj = movie.get();
         Long movieId = movieObj.getId();
         this.movieRepository.deleteById(movieId);
-        return;
+        return true;
     }
 }

@@ -17,11 +17,18 @@ public class Theatre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @NotNull
     private String name;
 
-    @Min(1)
-    private int size;
+    //Assumption: user does not try to book a seat that does not exist in the theatre.
+    // i assume that the user has some kind of a map of the theatre and able to choose a seat,
+    // maybe only not knowing about the availability of the seat
+    //hence there is no need to verify that the user tried to do that
+    //and there is no need to save a theatre's size
+
+    // @Min(1)
+    // private int size;
 
     public Long getId() {
         return this.id;
@@ -37,11 +44,11 @@ public class Theatre {
         this.name = inpName;
     }
 
-    public int getSize() {
-        return this.size;
-    }
+    // public int getSize() {
+    //     return this.size;
+    // }
 
-    public void setSize(int inpSize) {
-        this.size = inpSize;
-    }
+    // public void setSize(int inpSize) {
+    //     this.size = inpSize;
+    // }
 }

@@ -95,12 +95,12 @@ public class ShowtimeService {
         }
         Theatre theatre = theatreOpt.get();
         Long theatreId = theatre.getId();
-
+        String theatreName = theatre.getName();
         //find if there are overlapping showtimes for the fields to be updated: the new times and theatre
         List<Showtime> overlappingShowtimes = this.showtimeRepository.findOverlappingShowtimes(theatreId, startTime, endTime);
         if (!overlappingShowtimes.isEmpty()) {//there are overlapping showtimes with the newly
         //suggested showtime to update, cannot allow that so return the already existing showtime
-            return showtime;
+            throw new ShowtimeOverlapException("There already exists another overlapping showtime in the " +theatreName + " theatre");
         }
         
         //no restrictions, need to update the existing showtime object

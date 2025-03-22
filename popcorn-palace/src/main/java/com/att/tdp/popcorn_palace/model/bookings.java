@@ -22,6 +22,7 @@ public class Booking {
     @JoinColumn(name = "showtime_id", nullable = false)
     private Showtime showtime;
 
+    //assumption: no need to take care of users/user Ids at all, they are received properly by the client server
     private UUID userId;
 
     @Min(1)
