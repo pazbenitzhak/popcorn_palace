@@ -1,9 +1,12 @@
-package com.att.tdp.popcorn_palace;
+package com.att.tdp.popcorn_palace.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import com.att.tdp.popcorn_palace.repository.*;
+import com.att.tdp.popcorn_palace.model.*;
+import com.att.tdp.popcorn_palace.utils.*;
+
 
 
 import java.util.List;
@@ -85,7 +88,7 @@ public class ShowtimeService {
             return addShowtime(movieId,price,theatreName,startTime,endTime);
         }
         // else need to update info
-        Showtime showtime = showtime.get();
+        Showtime showtime = showtimeOpt.get();
         Optional<Theatre> theatreOpt = this.theatreRepository.findByName(theatreName);
         if (!theatreOpt.isPresent()) {
             //no theatre at that name, throw an exception
@@ -95,7 +98,6 @@ public class ShowtimeService {
         }
         Theatre theatre = theatreOpt.get();
         Long theatreId = theatre.getId();
-        String theatreName = theatre.getName();
         //find if there are overlapping showtimes for the fields to be updated: the new times and theatre
         List<Showtime> overlappingShowtimes = this.showtimeRepository.findOverlappingShowtimes(theatreId, startTime, endTime);
         if (!overlappingShowtimes.isEmpty()) {//there are overlapping showtimes with the newly

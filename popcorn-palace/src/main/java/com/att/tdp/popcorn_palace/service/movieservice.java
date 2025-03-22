@@ -1,8 +1,10 @@
-package com.att.tdp.popcorn_palace;
+package com.att.tdp.popcorn_palace.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.att.tdp.popcorn_palace.repository.MovieRepository;
+import com.att.tdp.popcorn_palace.model.Movie;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +26,8 @@ public class MovieService {
 
     public Movie addMovie(String title, String genre, int duration, double rating, int releaseYear) {
         //get existing movie object
-        Optional<Movie> movie = this.movieRepository.findByTitle(title);
-        if (movie.isPresent()) {//movie with the same title already exists, then update the info with
+        Optional<Movie> movieOpt = this.movieRepository.findByTitle(title);
+        if (movieOpt.isPresent()) {//movie with the same title already exists, then update the info with
         // the input provided here
             return updateMovie(title,genre,duration,rating,releaseYear);
         }

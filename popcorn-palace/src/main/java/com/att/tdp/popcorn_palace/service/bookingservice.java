@@ -1,17 +1,22 @@
-package com.att.tdp.popcorn_palace;
+package com.att.tdp.popcorn_palace.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
+import java.util.UUID;
 import java.util.Optional;
+import com.att.tdp.popcorn_palace.repository.BookingRepository;
+import com.att.tdp.popcorn_palace.repository.ShowtimeRepository;
+import com.att.tdp.popcorn_palace.model.Booking;
+import com.att.tdp.popcorn_palace.model.Showtime;
+import com.att.tdp.popcorn_palace.utils.SeatAlreadyTakenException;
+import com.att.tdp.popcorn_palace.utils.ShowtimeNotExistsForBookingException;
+
+
 
 @Service
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    private final TheatreRepository theatreRepository;
     private final ShowtimeRepository showtimeRepository;
 
     @Autowired
@@ -36,8 +41,9 @@ public class BookingService {
             throw new ShowtimeNotExistsForBookingException(String.format("showtime with ID %d does not exist",showtimeId));
         }
         //else, create a new booking object, get a booking id and return the object
+        Showtime showtimeObj = showtimeOpt.get();
         Booking booking = new Booking();
-        booking.setShowtimeId(showtimeId);
+        booking.setShowtime(showtimeObj);
         booking.setSeatNumber(seatNumber);
         booking.setUserId(userId);
         return this.bookingRepository.save(booking);

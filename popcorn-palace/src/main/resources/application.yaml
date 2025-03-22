@@ -10,11 +10,18 @@ spring:
     password: popcorn-palace
     driverClassName: org.postgresql.Driver
     platform: postgres
+  # jpa:
+  #   database: POSTGRESQL
+  #   show-sql: true
+  #   hibernate:
+  #     ddl-auto: update
   jpa:
-    database: POSTGRESQL
-    show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: update  # Adjust as needed (e.g., validate, create-drop)
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # Explicit Hibernate dialect
   sql:
     init:
       mode: always
