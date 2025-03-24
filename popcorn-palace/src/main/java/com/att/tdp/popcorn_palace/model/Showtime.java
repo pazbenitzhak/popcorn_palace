@@ -11,23 +11,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.validation.constraints.Min;
 
+import jakarta.persistence.Table;
+
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "showtimes")
 public class Showtime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
-
     @ManyToOne
     @JoinColumn(name = "theatre_id", nullable = false)
     private Theatre theatre;
-
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 

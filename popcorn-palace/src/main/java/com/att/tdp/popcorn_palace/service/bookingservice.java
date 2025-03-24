@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.Optional;
-import com.att.tdp.popcorn_palace.repository.BookingRepository;
-import com.att.tdp.popcorn_palace.repository.ShowtimeRepository;
+
 import com.att.tdp.popcorn_palace.model.Booking;
 import com.att.tdp.popcorn_palace.model.Showtime;
+import com.att.tdp.popcorn_palace.repository.BookingRepository;
+import com.att.tdp.popcorn_palace.repository.ShowtimeRepository;
 import com.att.tdp.popcorn_palace.utils.SeatAlreadyTakenException;
 import com.att.tdp.popcorn_palace.utils.ShowtimeNotExistsForBookingException;
 

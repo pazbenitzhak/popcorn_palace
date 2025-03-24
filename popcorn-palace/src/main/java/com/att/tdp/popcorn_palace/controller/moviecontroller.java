@@ -5,14 +5,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.att.tdp.popcorn_palace.service.MovieService;
-import com.att.tdp.popcorn_palace.model.Movie;
 import com.att.tdp.popcorn_palace.controller.requestobjects.*;
+import com.att.tdp.popcorn_palace.model.Movie;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/movies")
 public class MovieController {
 
     private final MovieService movieService;
@@ -23,7 +24,7 @@ public class MovieController {
     } 
 
 
-    @GetMapping("/movies/all")
+    @GetMapping("/all")
     public ResponseEntity<List<Movie>> getAllMovies() {
         List<Movie> allMovies = this.movieService.getAllMovies();
         return ResponseEntity.ok(allMovies);

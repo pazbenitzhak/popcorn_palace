@@ -11,22 +11,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.validation.constraints.Min;
 
+import jakarta.persistence.Table;
+
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "bookings")
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     @ManyToOne
     @JoinColumn(name = "showtime_id", nullable = false)
     private Showtime showtime;
-
     //assumption: no need to take care of users/user Ids at all, they are received properly by the client server
     private UUID userId;
-
     @Min(1)
     private int seatNumber;
 

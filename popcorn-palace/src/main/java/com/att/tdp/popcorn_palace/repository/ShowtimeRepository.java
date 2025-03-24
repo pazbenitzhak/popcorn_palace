@@ -4,8 +4,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import com.att.tdp.popcorn_palace.model.Showtime;
+
 import org.springframework.stereotype.Repository;
+
+import com.att.tdp.popcorn_palace.model.Showtime;
 
 
 @Repository
