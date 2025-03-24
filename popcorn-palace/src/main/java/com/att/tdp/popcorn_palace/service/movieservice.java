@@ -1,11 +1,8 @@
 package com.att.tdp.popcorn_palace.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.att.tdp.popcorn_palace.model.Movie;
 import com.att.tdp.popcorn_palace.repository.MovieRepository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +17,7 @@ public class MovieService {
     }
 
     public List<Movie> getAllMovies() {
-        List<Movie> moviesList = this.movieRepository.findAll();
-        return moviesList;
+        return this.movieRepository.findAll();
     }
 
     public Movie addMovie(String title, String genre, int duration, double rating, int releaseYear) {
@@ -34,7 +30,7 @@ public class MovieService {
         //create new movie object
         Movie movie = new Movie();
         movie.setTitle(title);
-        //TODO: maybe limit genres
+        // genres are basically limited by the Controller module
         movie.setGenre(genre);
         movie.setDuration(duration);
         movie.setRating(rating);
@@ -45,11 +41,11 @@ public class MovieService {
     public Movie updateMovie(String title, String genre, int duration, double rating, int releaseYear) {
         //get existing movie object
         Optional<Movie> movie = this.movieRepository.findByTitle(title);
-        if (!movie.isPresent()) {//need to create the movie, add it
+        if (movie.isEmpty()) {//need to create the movie, add it
             return addMovie(title,genre,duration,rating,releaseYear);
         }// else need to update info
         Movie movieObj = movie.get();
-        //TODO: maybe limit genres
+        // genres are basically limited by the Controller module
         movieObj.setGenre(genre);
         movieObj.setDuration(duration);
         movieObj.setRating(rating);
@@ -57,9 +53,11 @@ public class MovieService {
         return this.movieRepository.save(movieObj);
     }
 
+    //assumption: no 2 movies with the same name are inserted into the db.
+    // otherwise, during update we will need to query multiple films
     public boolean deleteMovie(String title) {
         Optional<Movie> movie = this.movieRepository.findByTitle(title);
-        if (!movie.isPresent()) {//movie does not exist already
+        if (movie.isEmpty()) {//movie does not exist already
             return false;
         }// else need to update info
         Movie movieObj = movie.get();

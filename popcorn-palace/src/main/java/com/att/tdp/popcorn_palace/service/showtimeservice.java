@@ -1,15 +1,10 @@
 package com.att.tdp.popcorn_palace.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
-
 import com.att.tdp.popcorn_palace.model.*;
 import com.att.tdp.popcorn_palace.repository.*;
 import com.att.tdp.popcorn_palace.utils.*;
-
-
-
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +30,8 @@ public class ShowtimeService {
     public Showtime addShowtime(Long movieId, double price, String theatreName, LocalDateTime startTime, LocalDateTime endTime) {
         //find if already exists showtime
         //first find theatre ID
-        Optional<Theatre> theatreOpt = this.theatreRepository.findByName(theatreName);
-        if (!theatreOpt.isPresent()) {
+        Optional<Theatre> theatreOpt = this.theatreRepository.findByTheatreName(theatreName);
+        if (theatreOpt.isEmpty()) {
             //no theatre at that name, throw an exception
             // i do not want to automatically create such a theatre, since it might create an 
             //opening for possible attackers to create values in the database
@@ -44,17 +39,15 @@ public class ShowtimeService {
         }
         Theatre theatre = theatreOpt.get();
         Long theatreId = theatre.getId();
-
         // get the movie object
         Optional<Movie> movieOpt = this.movieRepository.findById(movieId);
-        if (!movieOpt.isPresent()) {
+        if (movieOpt.isEmpty()) {
             //no theatre at that name, throw an exception
             // i do not want to automatically create such a theatre, since it might create an 
             //opening for possible attackers to create values in the database
             throw new MovieNotFoundException("No such movie exists with the following id: " +movieId);
         }
         Movie movie = movieOpt.get();
-
         //no need to search by price, since the price can be updated using this function
         Optional<Showtime> existShowtime = this.showtimeRepository.findByIdentifiers(movieId, theatreId, startTime, endTime);
         if (existShowtime.isPresent()) {
@@ -63,14 +56,12 @@ public class ShowtimeService {
             Long existShowtimeId = showtimeReg.getId();
             return updateShowtime(existShowtimeId,movieId,price,theatreName,startTime,endTime);
         }
-
         // no such showtime exists
         // use helper function to find overlapping times
         List<Showtime> overlappingShowtimes = this.showtimeRepository.findOverlappingShowtimes(theatreId, startTime, endTime);
         if (!overlappingShowtimes.isEmpty()) {
             throw new ShowtimeOverlapException("There already exists another overlapping showtime in the " +theatreName + " theatre");
         }
-
         //need to create the new showtime object
         //create new showtime object
         Showtime showtime = new Showtime();
@@ -85,13 +76,13 @@ public class ShowtimeService {
     public Showtime updateShowtime(Long showtimeId, Long movieId, double price, String theatreName, LocalDateTime startTime, LocalDateTime endTime) {
         //get existing showtime object
         Optional<Showtime> showtimeOpt = this.showtimeRepository.findById(showtimeId);
-        if (!showtimeOpt.isPresent()) {//need to create the movie, add it
+        if (showtimeOpt.isEmpty()) {//need to create the showtime, add it
             return addShowtime(movieId,price,theatreName,startTime,endTime);
         }
         // else need to update info
         Showtime showtime = showtimeOpt.get();
-        Optional<Theatre> theatreOpt = this.theatreRepository.findByName(theatreName);
-        if (!theatreOpt.isPresent()) {
+        Optional<Theatre> theatreOpt = this.theatreRepository.findByTheatreName(theatreName);
+        if (theatreOpt.isEmpty()) {
             //no theatre at that name, throw an exception
             // i do not want to automatically create such a theatre, since it might create an 
             //opening for possible attackers to create values in the database
@@ -101,15 +92,17 @@ public class ShowtimeService {
         Long theatreId = theatre.getId();
         //find if there are overlapping showtimes for the fields to be updated: the new times and theatre
         List<Showtime> overlappingShowtimes = this.showtimeRepository.findOverlappingShowtimes(theatreId, startTime, endTime);
-        if (!overlappingShowtimes.isEmpty()) {//there are overlapping showtimes with the newly
+        if (overlappingShowtimes.size()>=2 || (overlappingShowtimes.size()==1 && overlappingShowtimes.getFirst().getId()!=showtimeId)) {
+        //there are overlapping showtimes with the newly
         //suggested showtime to update, cannot allow that so return the already existing showtime
+            //OR there is
             throw new ShowtimeOverlapException("There already exists another overlapping showtime in the " +theatreName + " theatre");
         }
         
         //no restrictions, need to update the existing showtime object
         // query the movie
         Optional<Movie> movieOpt = this.movieRepository.findById(movieId);
-        if (!movieOpt.isPresent()) {
+        if (movieOpt.isEmpty()) {
             //no theatre at that name, throw an exception
             // i do not want to automatically create such a theatre, since it might create an 
             //opening for possible attackers to create values in the database
@@ -124,11 +117,12 @@ public class ShowtimeService {
         return this.showtimeRepository.save(showtime);
     }
 
-    public void deleteShowtime(Long showtimeId) {
+    public boolean deleteShowtime(Long showtimeId) {
         Optional<Showtime> showtimeOpt = this.showtimeRepository.findById(showtimeId);
-        if (!showtimeOpt.isPresent()) {//showtime does not exist already
-            return;
+        if (showtimeOpt.isEmpty()) {//showtime does not exist already
+            return false;
         }// else need to delete
         this.showtimeRepository.deleteById(showtimeId);
+        return true;
     }
 }

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.Optional;
-
 import com.att.tdp.popcorn_palace.model.Booking;
 import com.att.tdp.popcorn_palace.model.Showtime;
 import com.att.tdp.popcorn_palace.repository.BookingRepository;
@@ -38,7 +37,7 @@ public class BookingService {
         //query the showtime to it exists
         Optional<Showtime> showtimeOpt = this.showtimeRepository.findById(showtimeId);
         //if showtime does not exist throw exception
-        if (!showtimeOpt.isPresent()) {
+        if (showtimeOpt.isEmpty()) {
             throw new ShowtimeNotExistsForBookingException(String.format("showtime with ID %d does not exist",showtimeId));
         }
         //else, create a new booking object, get a booking id and return the object
@@ -48,14 +47,8 @@ public class BookingService {
         booking.setSeatNumber(seatNumber);
         booking.setUserId(userId);
         return this.bookingRepository.save(booking);
-        // //query the theatre to find number of seats, assume that theatre id was properly inserted
+        // //assumption: query the theatre to find number of seats, assume that theatre id was properly inserted
         // //to db for showtime registry (not check existence of theatre instance)
-        // Theatre theatre = showtimeForBooking.getTheatre();
-        // int theatreMaxSeatNum = theatre.getSize();
-        // //if theatre size is smaller then desired seatNumebr then return seat number too big exception
-        // if (seatNumber>theatreMaxSeatNum) {
-        //     throw new SeatNumber
-        // }
 
     }
 }

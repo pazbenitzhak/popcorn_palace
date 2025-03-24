@@ -8,16 +8,14 @@ import org.springframework.web.bind.annotation.*;
 import com.att.tdp.popcorn_palace.service.BookingService;
 import com.att.tdp.popcorn_palace.utils.SeatAlreadyTakenException;
 import com.att.tdp.popcorn_palace.utils.ShowtimeNotExistsForBookingException;
-import com.att.tdp.popcorn_palace.controller.requestobjects.*;
+import com.att.tdp.popcorn_palace.DTOs.*;
 import com.att.tdp.popcorn_palace.model.Booking;
-
-import javax.validation.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/bookings")
+@RequestMapping("/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -29,17 +27,19 @@ public class BookingController {
     
     @PostMapping
     //check in the input whether it's valid
-    public ResponseEntity<?> makeBooking(@Valid @RequestBody BookingRequest bookingRequest, BindingResult res) {
+//    @Valid OVER INPUT
+    public ResponseEntity<?> makeBooking(@RequestBody BookingDTO bookingRequest, BindingResult res) {
         //check inputs and handle case
-        if (res.hasErrors()) {
-            return ResponseEntity.badRequest().body(res.getAllErrors());
+        String validation = validateBookingDTOInputs(bookingRequest);
+        if (!validation.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validation);
         }
         //everything is good, can move on to the service
         try {
             Booking booking = this.bookingService.makeBooking(bookingRequest.getShowtimeId(), bookingRequest.getSeatNumber(), bookingRequest.getUserId());
             Map<String, String> response = new HashMap<>();
             response.put("bookingId", booking.getId().toString());
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         catch (SeatAlreadyTakenException seatExcept) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(String.format("Seat number %d is already booked, please try to book another seat",bookingRequest.getSeatNumber()));
@@ -50,4 +50,17 @@ public class BookingController {
 
 
 }
+    public String validateBookingDTOInputs(BookingDTO bookingRequest) {
+        String res = "";
+        if (bookingRequest.getSeatNumber()<=0) {
+            res += "Seat Number should be greater than 0, ";
+        }
+        if (bookingRequest.getShowtimeId()<=0) {
+            res+= "ShowTime Id should be greater than 0, ";
+        }
+        if (res.endsWith(", ")) {
+            res = res.substring(0, res.length()-2);
+        }
+        return res;
+    }
 }

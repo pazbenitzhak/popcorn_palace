@@ -2,17 +2,14 @@ package com.att.tdp.popcorn_palace.model;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import java.time.LocalDateTime;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.validation.constraints.Min;
-
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
-
 
 @Entity
 @AllArgsConstructor
@@ -30,8 +27,6 @@ public class Showtime {
     private Theatre theatre;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-
-    @Min(0)
     private double price;
 
     public Long getId() {

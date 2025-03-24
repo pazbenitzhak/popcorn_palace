@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS movies (
 
 CREATE TABLE IF NOT EXISTS theatres (
     id BIGSERIAL PRIMARY KEY,
-    -- theatre_name  VARCHAR(60) NOT NULL,
-    theatre_size INT NOT NULL
+    theatre_name  VARCHAR(60) NOT NULL
+--     theatre_size INT NOT NULL
     ); 
 
 CREATE TABLE IF NOT EXISTS showtimes (

@@ -2,15 +2,13 @@ package com.att.tdp.popcorn_palace.model;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import java.util.UUID;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
-import javax.validation.constraints.Min;
-
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 
@@ -27,7 +25,6 @@ public class Booking {
     private Showtime showtime;
     //assumption: no need to take care of users/user Ids at all, they are received properly by the client server
     private UUID userId;
-    @Min(1)
     private int seatNumber;
 
     public UUID getId() {
